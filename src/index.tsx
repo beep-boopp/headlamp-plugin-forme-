@@ -14,6 +14,10 @@ import { DetailsViewSectionProps } from '@kinvolk/headlamp-plugin/lib/components
 import K8s from '@kinvolk/headlamp-plugin/lib/K8s';
 import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
+import { DNSDebugPanel } from './gadgets/dnsdebug';
+import { EBPFTopDashboard } from './gadgets/ebpftop';
+import { InstallWizard } from './gadgets/installwizard';
+import { TrafficVisualizer } from './gadgets/trafficvis';
 import { IGNotFound } from './common/NotFound';
 import { GadgetCreation } from './gadgets/gadgetcreationinresource';
 import { GadgetDetails } from './gadgets/gadgetDetails';
@@ -35,6 +39,18 @@ registerSidebarEntry({
   label: 'Gadgets',
 });
 
+registerSidebarEntry({
+  name: 'security',
+  icon: 'mdi:shield-lock',
+  url: '/ig-security/ebpftop',
+  parent: null,
+  label: 'IG Security',
+});
+registerSidebarEntry({ name: 'ebpftop', parent: 'security', url: '/ig-security/ebpftop', label: 'eBPF Monitor' });
+registerSidebarEntry({ name: 'trafficvis', parent: 'security', url: '/ig-security/traffic', label: 'Traffic Map' });
+registerSidebarEntry({ name: 'installwizard', parent: 'security', url: '/ig-security/install', label: 'Install Wizard' });
+registerSidebarEntry({ name: 'dnsdebug', parent: 'security', url: '/ig-security/dns', label: 'DNS Debug' });
+
 registerRoute({
   path: '/gadgets',
   component: GadgetList,
@@ -50,6 +66,11 @@ registerRoute({
   sidebar: 'gadgets',
   name: 'gadgets',
 });
+
+registerRoute({ path: '/ig-security/ebpftop', component: EBPFTopDashboard, exact: true, sidebar: 'ebpftop', name: 'ebpftop' });
+registerRoute({ path: '/ig-security/traffic', component: TrafficVisualizer, exact: true, sidebar: 'trafficvis', name: 'trafficvis' });
+registerRoute({ path: '/ig-security/install', component: InstallWizard, exact: true, sidebar: 'installwizard', name: 'installwizard' });
+registerRoute({ path: '/ig-security/dns', component: DNSDebugPanel, exact: true, sidebar: 'dnsdebug', name: 'dnsdebug' });
 
 registerDetailsViewSection(({ resource }: DetailsViewSectionProps) => {
   const embeddedResources = JSON.parse(localStorage.getItem('headlamp_embeded_resources') || '[]');
